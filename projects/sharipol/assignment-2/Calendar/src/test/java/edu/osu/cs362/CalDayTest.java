@@ -5,6 +5,7 @@ package edu.osu.cs362;
  */
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 
@@ -82,13 +83,14 @@ public class CalDayTest {
 				 " \t4/11/2017 at 2:30pm ,Class, Rescheduled class.\n" +
 				 " \t4/11/2017 at 3:30pm ,Birthday Party, This is my birthday party.\n" +
 				 " \n", today.toString());
+		 assertTrue(today.iterator().hasNext());
 	 }
 	
 	
 	
 	@Test
 	public void test02()  throws Throwable  {
-		//Create Appointment
+		//Create an invalid appointment
 		int startHour=-15;
 		int startMinute=30;
 		int startDay=11;
@@ -208,6 +210,7 @@ public class CalDayTest {
 				description);
 		//Create CalDay objects
 		CalDay today = new CalDay (new GregorianCalendar(-2017,-4,-11));
+		assertFalse(today.iterator().hasNext());
 		//Set the calender appointments
 		today.addAppt(appt1);
 		today.addAppt(appt2);
@@ -231,5 +234,114 @@ public class CalDayTest {
 		CalDay today = new CalDay();
 		//Assertions
 		assertFalse(today.isValid());
+		assertEquals(null, today.iterator());
+	}
+	
+	
+	
+	
+	
+	@Test
+	public void test05()  throws Throwable  {
+		//Create uninitiated CalDay
+		CalDay today = new CalDay();
+		//Assertions
+		assertFalse(today.isValid());
+		//Create Appointment list
+		LinkedList<Appt> listAppts = new LinkedList<Appt>();
+		//Create Appointment
+		int startHour=15;
+		int startMinute=30;
+		int startDay=11;
+		int startMonth=4;
+		int startYear=2017;
+		String title="Birthday Party";
+		String description="This is my birthday party.";
+		//Construct a new Appointment object with the initial data
+		Appt appt = new Appt(startHour,
+				startMinute ,
+				startDay ,
+				startMonth ,
+				startYear ,
+				title,
+				description);
+		listAppts.add(appt);
+		//Change CalDay variables
+		today.day = 11;
+		today.month = 4;
+		today.year = 2017;
+		today.appts = listAppts;
+		today.valid = true;
+		//Second assertion
+		assertTrue(today.isValid());
+		assertEquals(11, today.getDay());
+		assertEquals(4, today.getMonth());
+		assertEquals(2017, today.getYear());
+		assertEquals(1, today.getSizeAppts());
+	}
+	
+	
+	
+	
+	
+	@Test
+	public void test06()  throws Throwable  {
+		CalDay calDay = new CalDay();
+		Iterator itr = calDay.iterator();
+		String test = calDay.toString();
+		assertFalse(calDay.isValid());
+	}
+	
+	
+	@Test
+	public void test07()  throws Throwable  {
+		//Create Appointment
+		int startHour=15;
+		int startMinute=30;
+		int startDay=11;
+		int startMonth=4;
+		int startYear=2017;
+		String title="Birthday Party";
+		String description="This is my birthday party.";
+		//Construct a new Appointment object with the initial data
+		Appt appt1 = new Appt(startHour,
+				startMinute ,
+				startDay ,
+				startMonth ,
+				startYear ,
+				title,
+				description);
+		// create another appointment
+		startHour=15;
+		startMinute=30;
+		startDay=11;
+		startMonth=4;
+		startYear=2017;
+		title="Class";
+		description="Rescheduled class.";
+		//Construct a new Appointment object with the initial data
+		Appt appt2 = new Appt(startHour,
+				startMinute ,
+				startDay ,
+				startMonth ,
+				startYear ,
+				title,
+				description);
+		CalDay today = new CalDay (new GregorianCalendar(2017,4,11));
+		//Set the calender appointments
+		today.addAppt(appt1);
+		today.addAppt(appt2);
+		//Assertions
+		assertTrue(today.isValid());
+		assertEquals(11, today.getDay());
+		assertEquals(4, today.getMonth());
+		assertEquals(2017, today.getYear());
+		assertEquals(2, today.getSizeAppts());
+		assertEquals("\t --- 4/11/2017 --- \n" +
+				" --- -------- Appointments ------------ --- \n" +
+				"\t4/11/2017 at 3:30pm ,Birthday Party, This is my birthday party.\n" +
+				" \t4/11/2017 at 3:30pm ,Class, Rescheduled class.\n" +
+				" \n", today.toString());
+		assertTrue(today.iterator().hasNext());
 	}
 }

@@ -210,7 +210,7 @@ public class TimeTableTest {
 				title,
 				description);
 		listAppts.add(appt);
-		//Create GregortianCalender objects
+		//Create GregorianCalender objects
 		GregorianCalendar firstDay = new GregorianCalendar(2017,4,11);
 		GregorianCalendar lastDay = new GregorianCalendar(2017,4,13);
 		//Create TimeTable
@@ -228,12 +228,71 @@ public class TimeTableTest {
 		//Delete an appointment
 		LinkedList<Appt> listUpdatedAppts=timeTable.deleteAppt(listAppts, appt);
 		calDays = new LinkedList<CalDay>();
+		assertEquals(0, calDays.size());
 		calDays = timeTable.getApptRange(listAppts, firstDay, lastDay);
+		assertEquals(2, calDays.size());
 		//Second assertions
 		assertEquals("\t --- 4/11/2017 --- \n" +
 				" --- -------- Appointments ------------ --- \n" +
 				"\t4/11/2017 at 3:30pm ,Birthday Party, This is my birthday party.\n" +
 				" \n", calDays.get(0).toString());
+	}
+	
+	
+	
+	
+	
+	@Test
+	public void test04()  throws Throwable  {
+		//Create list of appointments
+		LinkedList<Appt> listAppts = new LinkedList<Appt>();
+		GregorianCalendar firstDay = new GregorianCalendar(2017,4,11);
+		GregorianCalendar lastDay = new GregorianCalendar(2017,4,13);
+		Appt appt = new Appt(1,1,1,1,1,null, null);
+		//Create TimeTable
+		TimeTable timeTable=new TimeTable();
+		LinkedList<CalDay> calDays = new LinkedList<CalDay>();
+		calDays=timeTable.getApptRange(listAppts,firstDay,lastDay);
+		//Assertions
+		assertEquals(null, timeTable.deleteAppt(listAppts,appt));
+		assertEquals("\t --- 4/11/2017 --- \n" +
+				" --- -------- Appointments ------------ --- \n" +
+				"\n", calDays.get(0).toString());
+	}
+	
+	
+	
+	
+	
+	@Test
+	public void test05()  throws Throwable  {
+		//Create list of appointments
+		LinkedList<Appt> listAppts = new LinkedList<Appt>();
+		GregorianCalendar firstDay = new GregorianCalendar(2017,4,11);
+		GregorianCalendar lastDay = new GregorianCalendar(2017,4,13);
+		Appt appt = new Appt(-1,0,0,0,0,null, null);
+		listAppts.add(appt);
+		//Create TimeTable
+		TimeTable timeTable=new TimeTable();
+		LinkedList<CalDay> calDays = new LinkedList<CalDay>();
+		calDays=timeTable.getApptRange(listAppts,firstDay,lastDay);
+		//Assertions
+		assertEquals(null, timeTable.deleteAppt(listAppts,appt));
+	}
+	
+	@Test
+	public void test06()  throws Throwable  {
+		//Create list of appointments
+		LinkedList<Appt> listAppts = new LinkedList<Appt>();
+		GregorianCalendar firstDay = new GregorianCalendar(2017,4,11);
+		GregorianCalendar lastDay = new GregorianCalendar(2017,4,13);
+		Appt appt = new Appt(1,1,1,1,1,null, null);
+		listAppts.add(appt);
+		//Create TimeTable
+		TimeTable timeTable=new TimeTable();
+		LinkedList<CalDay> calDays = new LinkedList<CalDay>();
+		LinkedList<Appt> listUpdatedAppts=timeTable.deleteAppt(listAppts, appt);
+		assertEquals(null, timeTable.deleteAppt(listAppts,appt));
 	}
 	
 }
