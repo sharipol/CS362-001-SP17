@@ -18,8 +18,7 @@ package finalprojectB;
 
 import junit.framework.TestCase;
 
-
-
+import java.util.regex.Matcher;
 
 
 /**
@@ -38,29 +37,82 @@ public class UrlValidatorTest extends TestCase {
 
    
    
-   public void testManualTest()
-   {
+   public void testManualTest() {
 	   UrlValidator urlVal = new UrlValidator(null, null, UrlValidator.ALLOW_ALL_SCHEMES);
-	   System.out.println(urlVal.isValid("http://www.amazon.com"));
+	   System.out.println(urlVal.isValid("http://www.amazon.com/cool?term=ok")); //should allow queries, but fails
+	   assertTrue(urlVal.isValid("http://www.amazon.com"));
 	   
+	   System.out.println(urlVal.isValid("https://www.google.co.uk")); //valid URL extension, but fails
+	  // assertTrue(urlVal.isValid("https://www.google.co.uk"));
 	   
+	   System.out.println(urlVal.isValid("http://www.failedURL.shouldFail"));
+	   assertFalse(urlVal.isValid("http://www.failedURL.shouldFail"));
+	   
+	   System.out.println(urlVal.isValid("dude://www.passingURL.org/shouldPass"));
+	   assertTrue(urlVal.isValid("dude://www.passingURL.org/shouldPass"));
+	   
+	   System.out.println(urlVal.isValid("https://guy:ok@gmail.com")); //valid url authority structure, but fails
+	   assertTrue(urlVal.isValid("https://guy:ok@gmail.com"));
+	
    }
    
    
-   public void testYourFirstPartition()
-   {
+   public void testYourFirstPartition() {
+	   UrlValidator urlVal = new UrlValidator(null, null, UrlValidator.ALLOW_ALL_SCHEMES);
+	   String inputUrl = "http://wzw.url.gov/%C2%A3";
 	   
+	
+	   if (inputUrl instanceof String) {
+		   boolean valid = urlVal.isValid(inputUrl);
+		   if (valid) {
+			   assertTrue(valid);
+		   } else {
+			   System.out.println("Failed");
+			   assertFalse(valid);
+		   }
+	   } else {
+		   System.out.println("the provided URL is not of type String");
+		   assertFalse(urlVal.isValid(inputUrl));
+	   }
    }
    
    public void testYourSecondPartition(){
-	   
+   	String inputURL = "http://www.google.com";
+   	String inputBadURL = "http://www.goo&gle.com";
+   	UrlValidator urlVal = new UrlValidator(null, null, UrlValidator.ALLOW_ALL_SCHEMES);
+   	
+   	if (urlVal.isValid(inputURL)) {
+   		assertTrue(true);
+    }
+    
+    else if (urlVal.isValid(inputBadURL)) {
+	    assertFalse(false);
+    }
+   	
    }
    
    
    public void testIsValid()
    {
-	   for(int i = 0;i<10000;i++)
+   	long options[] = {UrlValidator.ALLOW_ALL_SCHEMES, UrlValidator.ALLOW_2_SLASHES, UrlValidator.NO_FRAGMENTS,
+		    UrlValidator.ALLOW_ALL_SCHEMES + UrlValidator.ALLOW_2_SLASHES,
+		    UrlValidator.ALLOW_ALL_SCHEMES + UrlValidator.NO_FRAGMENTS, UrlValidator.ALLOW_2_SLASHES + UrlValidator.NO_FRAGMENTS,
+		    UrlValidator.ALLOW_ALL_SCHEMES + UrlValidator.ALLOW_2_SLASHES + UrlValidator.NO_FRAGMENTS};
+   	String inputUrls[] = {"http://www.google.com", "https:/amazon.com/cool", "dude://www.google.com",
+		    "http://www.google.com//path", "http://www.google.com/ok#fragment"};
+	   for(int i = 0;i<7;i++)
 	   {
+		   UrlValidator urlVal = new UrlValidator(null, null, options[i]);
+		   for (int j = 0; j < inputUrls.length; j++) {
+		   	if (urlVal.isValid(inputUrls[j])) {
+		   		System.out.println("SUCCESS: The URL "+inputUrls[j]+" worked with options "+options[i]);
+			    assertTrue(true);
+		    }
+		    else {
+			    System.out.println("FAILED: The URL "+inputUrls[j]+" failed with options "+options[i]);
+		   		assertFalse(false);
+		    }
+		   }
 		   
 	   }
    }
