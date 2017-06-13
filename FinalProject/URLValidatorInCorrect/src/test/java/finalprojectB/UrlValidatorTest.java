@@ -39,11 +39,11 @@ public class UrlValidatorTest extends TestCase {
    
    public void testManualTest() {
 	   UrlValidator urlVal = new UrlValidator(null, null, UrlValidator.ALLOW_ALL_SCHEMES);
-	   System.out.println(urlVal.isValid("http://www.amazon.com/cool?term=ok")); //should allow queries, but fails
-	   assertTrue(urlVal.isValid("http://www.amazon.com"));
+	   System.out.println(urlVal.isValid("https://www.google.com/search?q=url")); //should allow queries, but fails
+	   assertTrue(urlVal.isValid("https://www.google.com/search?q=url"));
 	   
 	   System.out.println(urlVal.isValid("https://www.google.co.uk")); //valid URL extension, but fails
-	  // assertTrue(urlVal.isValid("https://www.google.co.uk"));
+	   assertTrue(urlVal.isValid("https://www.google.co.uk"));
 	   
 	   System.out.println(urlVal.isValid("http://www.failedURL.shouldFail"));
 	   assertFalse(urlVal.isValid("http://www.failedURL.shouldFail"));
@@ -51,8 +51,8 @@ public class UrlValidatorTest extends TestCase {
 	   System.out.println(urlVal.isValid("dude://www.passingURL.org/shouldPass"));
 	   assertTrue(urlVal.isValid("dude://www.passingURL.org/shouldPass"));
 	   
-	   System.out.println(urlVal.isValid("https://guy:ok@gmail.com")); //valid url authority structure, but fails
-	   assertTrue(urlVal.isValid("https://guy:ok@gmail.com"));
+	   System.out.println(urlVal.isValid("https://www.google.com:1000")); //valid url authority structure, but fails
+	   assertTrue(urlVal.isValid("https://www.google.com:1000"));
 	
    }
    
